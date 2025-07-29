@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps<{ doorOpen: boolean }>()
+defineProps<{ doorOpen: boolean }>()
 const emit = defineEmits<{
   (event: 'toggle'): void
 }>()

@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps<{ selected: string | null }>()
+defineProps<{ selected: string | null }>()
 defineEmits<{
   (e: 'select', program: string): void
 }>()

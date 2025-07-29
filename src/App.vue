@@ -1,23 +1,34 @@
 <template>
   <div class="app">
     <h1>🧺 Pralnia Pieniędzy 💸</h1>
-    <MoneyLoader @bill-thrown="onBillThrown" />
-    <WasherDoor :doorOpen="doorOpen" @toggle="doorOpen = !doorOpen" />
-    <MoneyStack v-if="doorOpen && !moneyInserted" @insert="moneyInserted = true" />
-    <ProgramSelector :selected="program" @select="program = $event" />
+    <MoneyLoader ref="loader" />
+    <Washer
+      :spinning="washing"
+      :doorOpen="doorOpen"
+      @bill-thrown="onBillThrown"
+    />
+    <WasherDoor
+      v-if="moneyInserted"
+      :doorOpen="doorOpen"
+      @toggle="doorOpen = !doorOpen"
+    />
+    <ProgramSelector
+      v-if="moneyInserted && !doorOpen"
+      :selected="program"
+      @select="program = $event"
+    />
     <StartButton
-      :canStart="!doorOpen && moneyInserted && program !== null && !washing"
-      @start="washing = true"
+      v-if="!doorOpen && moneyInserted && program !== null"
+      :canStart="!washing"
+      @start="startWashing"
     />
     <p v-if="washing">Pranie trwa... 🌀</p>
-    <Washer :spinning="washing" :doorOpen="doorOpen" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 import WasherDoor from './components/WasherDoor.vue'
-import MoneyStack from './components/MoneyStack.vue'
 import ProgramSelector from './components/ProgramSelector.vue'
 import StartButton from './components/StartButton.vue'
 import MoneyLoader from './components/MoneyLoader.vue'
@@ -27,9 +38,11 @@ const doorOpen = ref(true)
 const moneyInserted = ref(false)
 const program = ref<string | null>(null)
 const washing = ref(false)
+const loader = ref<InstanceType<typeof MoneyLoader> | null>(null)
 
 function onBillThrown(id: number) {
-  console.log('wrzuciłeś banknot ${id}')
+  moneyInserted.value = true
+  loader.value?.removeBill(id)
 }
 
 function startWashing(){

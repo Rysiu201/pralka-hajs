@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps<{ canStart: boolean }>()
+defineProps<{ canStart: boolean }>()
 const emit = defineEmits<{
   (event: 'start'): void
 }>()
