@@ -6,13 +6,13 @@
 
     <div class="banknotes">
       <img
-        v-for="(bill, index) in bills"
+        v-for="bill in bills"
         :key="bill.id"
         :src="billImage"
         alt="banknot"
         class="banknote"
         draggable="true"
-        @dragstart="onDragStart(bill.id)"
+        @dragstart="onDragStart(bill.id, $event)"
       />
     </div>
   </div>
@@ -22,21 +22,23 @@
 import { ref } from 'vue'
 import billImage from '../assets/black_money.png'
 
-const emit = defineEmits<{
-  (e: 'bill-thrown', id: number): void
-}>()
-
 const amount = ref(100)
 const bills = ref<{ id: number } []>([])
+
+function removeBill(id: number) {
+  bills.value = bills.value.filter(b => b.id !== id)
+}
 
 function emitBills() {
   const count = Math.floor(amount.value / 100)
   bills.value = Array.from({ length: count }, (_, i) => ({ id: i }))
 }
 
-function onDragStart(id: number) {
+function onDragStart(id: number, event: DragEvent) {
   event.dataTransfer?.setData('text/plain', id.toString())
 }
+
+defineExpose({ removeBill })
 </script>
 
 <style scoped>

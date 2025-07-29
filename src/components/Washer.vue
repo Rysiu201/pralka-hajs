@@ -3,7 +3,7 @@
     <img :src="washerBase" class="washer-base" alt="pralka" />
     <img :src="drumImage" class="washer-drum" :class="{ spinning, visible: spinning }" alt="bęben" />
     <img :src="washerDoor" class="washer-door" :class="{ open: doorOpen }" alt="drzwi" />
-    <img v-for="i in 15" v-if="spinning" :key="i" src="../assets/black_money.png" class="money-spinning" :style="getMoneyStyle(i)" alt="pieniądze"/>
+    <img v-for="i in 15" v-if="spinning" :key="i" src="../assets/black_money.png" class="money-spinning" :style="getMoneyStyle()" alt="pieniądze"/>
     <div v-if="spinning" class="washer-water"></div>
     <div class="washer-dropzone"
         @dragover.prevent
@@ -17,7 +17,7 @@ import washerBase from '../assets/washer_nodoor.png'
 import washerDoor from '../assets/washer_door.png'
 import drumImage from '../assets/drum.png'
 
-const getMoneyStyle = (i: number) => {
+const getMoneyStyle = () => {
   const baseLeft = 33 + Math.random() * 25  // np. 40–60%
   const baseTop = 65 + Math.random() * 13  // np. 45–55%
   const delay = (Math.random() * 0.8).toFixed(2) // 0–0.5s
