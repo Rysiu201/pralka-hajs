@@ -1,15 +1,24 @@
 <template>
-  <div>
-    <p>Drzwi pralki są: <strong>{{ doorOpen ? 'Otwarte' : 'Zamknięte' }}</strong></p>
-    <button @click="emit('toggle')">
-      {{ doorOpen ? 'Zamknij drzwi' : 'Otwórz drzwi' }}
-    </button>
-  </div>
+  <button
+    v-if="doorOpen"
+    class="red-dot-button door-control"
+    @click="emit('toggle')"
+  />
 </template>
 
 <script lang="ts" setup>
-const props = defineProps<{ doorOpen: boolean }>()
+defineProps<{ doorOpen: boolean }>()
 const emit = defineEmits<{
   (event: 'toggle'): void
 }>()
 </script>
+
+<style scoped>
+.door-control {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 58%;
+  left: 65%;
+}
+</style>

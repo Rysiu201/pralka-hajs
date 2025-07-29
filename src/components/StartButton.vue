@@ -1,14 +1,22 @@
 <template>
-  <div>
-    <button :disabled="!canStart" @click="emit('start')">
-      ▶️ Start prania
-    </button>
-  </div>
+  <button
+    class="red-dot-button start-control"
+    :disabled="!canStart"
+    @click="emit('start')"
+  />
 </template>
 
 <script lang="ts" setup>
-const props = defineProps<{ canStart: boolean }>()
+defineProps<{ canStart: boolean }>()
 const emit = defineEmits<{
   (event: 'start'): void
 }>()
 </script>
+
+<style scoped>
+.start-control {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+}
+</style>
