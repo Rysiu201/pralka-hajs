@@ -4,3 +4,18 @@ button {
   font-size: 1rem;
   cursor: pointer;
 }
+
+.red-dot-button {
+  background: red;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.red-dot-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

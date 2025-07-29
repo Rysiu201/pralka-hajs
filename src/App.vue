@@ -2,26 +2,34 @@
   <div class="app">
     <h1>🧺 Pralnia Pieniędzy 💸</h1>
     <MoneyLoader ref="loader" />
-    <Washer
-      :spinning="washing"
-      :doorOpen="doorOpen"
-      @bill-thrown="onBillThrown"
-    />
-    <WasherDoor
-      v-if="moneyInserted"
-      :doorOpen="doorOpen"
-      @toggle="doorOpen = !doorOpen"
-    />
-    <ProgramSelector
-      v-if="moneyInserted && !doorOpen"
-      :selected="program"
-      @select="program = $event"
-    />
-    <StartButton
-      v-if="!doorOpen && moneyInserted && program !== null"
-      :canStart="!washing"
-      @start="startWashing"
-    />
+    <div class="washer-container">
+      <Washer
+        :spinning="washing"
+        :doorOpen="doorOpen"
+        @bill-thrown="onBillThrown"
+      />
+      <WasherDoor
+        v-if="moneyInserted && doorOpen"
+        :doorOpen="doorOpen"
+        @toggle="doorOpen = false"
+      />
+      <button
+        v-if="moneyInserted && !doorOpen && !showProgramMenu"
+        class="red-dot-button program-toggle"
+        @click="showProgramMenu = true"
+      />
+      <ProgramSelector
+        v-if="showProgramMenu"
+        :selected="program"
+        @select="selectProgram"
+      />
+      <StartButton
+        v-if="program !== null && !doorOpen && !washing"
+        :canStart="true"
+        @start="startWashing"
+      />
+      <div class="counter" v-if="insertedCount > 0">{{ insertedCount }}</div>
+    </div>
     <p v-if="washing">Pranie trwa... 🌀</p>
   </div>
 </template>
@@ -39,10 +47,18 @@ const moneyInserted = ref(false)
 const program = ref<string | null>(null)
 const washing = ref(false)
 const loader = ref<InstanceType<typeof MoneyLoader> | null>(null)
+const insertedCount = ref(0)
+const showProgramMenu = ref(false)
 
 function onBillThrown(id: number) {
   moneyInserted.value = true
+  insertedCount.value += 1
   loader.value?.removeBill(id)
+}
+
+function selectProgram(p: string) {
+  program.value = p
+  showProgramMenu.value = false
 }
 
 function startWashing(){
@@ -58,5 +74,27 @@ function startWashing(){
   text-align: center;
   padding: 2rem;
   font-family: sans-serif;
+}
+
+.washer-container {
+  position: relative;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.program-toggle {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.counter {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
 }
 </style>
