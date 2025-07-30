@@ -6,6 +6,7 @@
       <Washer
         :spinning="washing"
         :doorOpen="doorOpen"
+        :billsCount="insertedCount"
         @bill-thrown="onBillThrown"
       />
       <WasherDoor
@@ -28,14 +29,14 @@
         :canStart="true"
         @start="startWashing"
       />
-      <div class="counter" v-if="insertedCount > 0">{{ insertedCount }}</div>
+      <div class="counter" v-if="insertedCount > 0">{{ displayCounter }}</div>
     </div>
     <p v-if="washing">Pranie trwa... 🌀</p>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import WasherDoor from './components/WasherDoor.vue'
 import ProgramSelector from './components/ProgramSelector.vue'
 import StartButton from './components/StartButton.vue'
@@ -49,6 +50,10 @@ const washing = ref(false)
 const loader = ref<InstanceType<typeof MoneyLoader> | null>(null)
 const insertedCount = ref(0)
 const showProgramMenu = ref(false)
+const washTime = ref<number | null>(null)
+let timer: ReturnType<typeof setInterval> | null = null
+
+const displayCounter = computed(() => washTime.value ?? insertedCount.value)
 
 function onBillThrown(id: number) {
   moneyInserted.value = true
@@ -59,13 +64,34 @@ function onBillThrown(id: number) {
 function selectProgram(p: string) {
   program.value = p
   showProgramMenu.value = false
+  const index = ['Kryptowaluty', 'Fundacja', 'Sztuka', 'Zagraniczny przelew'].indexOf(p)
+  const reduction = (index + 1) * 30
+  washTime.value = insertedCount.value * 130 - reduction
 }
 
 function startWashing(){
+  if (washTime.value === null) return
   washing.value = true
-  setTimeout(() => {
-    washing.value =false
-  }, 5000)
+  timer && clearInterval(timer)
+  timer = setInterval(() => {
+    if (washTime.value !== null) {
+      washTime.value -= 1
+      if (washTime.value <= 0) {
+        finishWashing()
+      }
+    }
+  }, 1000)
+}
+
+function finishWashing(){
+  timer && clearInterval(timer)
+  washing.value = false
+  doorOpen.value = true
+  moneyInserted.value = false
+  insertedCount.value = 0
+  program.value = null
+  washTime.value = null
+  showProgramMenu.value = false
 }
 </script>
 
