@@ -83,17 +83,24 @@ function startWashing(){
 }
 
 .program-toggle {
+  font-size: 10px;
+  text-align: center;
   position: absolute;
-  top: -10px;
-  left: 50%;
+  top: 26.9%;
+  left: 40%;
+  width: 4.1%;
+  height: 1.9%;
+  border-radius: 10px; /* brak zaokrągleń = kwadrat */
   transform: translateX(-50%);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 }
 
 .counter {
   position: absolute;
-  top: 0;
-  right: 0;
-  background: rgba(255, 255, 255, 0.8);
+  font-size: 5px;
+  color: aquamarine;
+  top: 28.7%;
+  right: 31%;
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
 }

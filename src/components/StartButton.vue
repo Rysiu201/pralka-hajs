@@ -16,7 +16,13 @@ const emit = defineEmits<{
 <style scoped>
 .start-control {
   position: absolute;
-  top: -10px;
-  right: -10px;
+  width: 6%;
+  height: 6%;
+  top: 25.5%;
+  right: 68.5%;
+  border-style: solid;
+  border-radius: 3vh;
+  border-color: forestgreen;
+  border-width: 1px;
 }
 </style>
