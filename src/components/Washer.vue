@@ -3,7 +3,7 @@
     <img :src="washerBase" class="washer-base" alt="pralka" />
     <img :src="drumImage" class="washer-drum" :class="{ spinning, visible: spinning }" alt="bęben" />
     <img :src="washerDoor" class="washer-door" :class="{ open: doorOpen }" alt="drzwi" />
-    <img v-for="i in 15" v-if="spinning" :key="i" src="../assets/black_money.png" class="money-spinning" :style="getMoneyStyle()" alt="pieniądze"/>
+    <img v-for="i in billsCount" v-if="spinning" :key="i" src="../assets/black_money.png" class="money-spinning" :style="getMoneyStyle()" alt="pieniądze"/>
     <div v-if="spinning" class="washer-water"></div>
     <div class="washer-dropzone"
         @dragover.prevent
@@ -43,6 +43,7 @@ function onDrop(event: DragEvent) {
 defineProps<{
   spinning: boolean
   doorOpen: boolean
+  billsCount: number
 }>()
 </script>
 
